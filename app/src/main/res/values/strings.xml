@@ -12,4 +12,5 @@
     <string name="status_paused">Trạng thái: tạm dừng</string>
 
     <string name="recreate_count">Số lần Activity được tạo lại: %1$d</string>
+    <string name="stop_background">Dừng khi ra nền</string>
 </resources>

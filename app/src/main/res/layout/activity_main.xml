@@ -60,7 +60,12 @@
             android:text="@string/reset" />
 
     </LinearLayout>
-
+    <CheckBox
+        android:id="@+id/cbStopBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/stop_background" />
     <TextView
         android:id="@+id/tvRecreate"
         android:layout_width="wrap_content"

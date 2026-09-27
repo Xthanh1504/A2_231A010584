@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -24,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String KEY_ACCUMULATED = "accumulated";
     private static final String KEY_START = "start";
     private static final String KEY_RECREATE = "recreate";
-
+    private static final String KEY_STOP_BACKGROUND = "stop_background";
     private TextView tvTime, tvStatus, tvRecreate;
     private Button btnStartPause, btnReset;
-
+    private CheckBox cbStopBackground;
     private boolean running = false;
     private long accumulated = 0L;
     private long startTime = 0L;
@@ -61,13 +62,15 @@ public class MainActivity extends AppCompatActivity {
         tvRecreate = findViewById(R.id.tvRecreate);
         btnStartPause = findViewById(R.id.btnStartPause);
         btnReset = findViewById(R.id.btnReset);
-
+        cbStopBackground = findViewById(R.id.cbStopBackground);
         if (savedInstanceState != null) {
             running = savedInstanceState.getBoolean(KEY_RUNNING);
             accumulated = savedInstanceState.getLong(KEY_ACCUMULATED);
             startTime = savedInstanceState.getLong(KEY_START);
             recreateCount = savedInstanceState.getInt(KEY_RECREATE) + 1;
-
+            cbStopBackground.setChecked(
+                    savedInstanceState.getBoolean(KEY_STOP_BACKGROUND)
+            );
             Log.d(TAG, "onCreate: KHÔI PHỤC trạng thái, running="
                     + running + ", accumulated=" + accumulated + "ms");
         } else {
@@ -199,6 +202,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
+        if (cbStopBackground.isChecked() && running) {
+            pauseStopwatch();
+        }
+
         Log.d(TAG, "onStop");
     }
 
@@ -225,7 +233,10 @@ public class MainActivity extends AppCompatActivity {
         outState.putLong(KEY_ACCUMULATED, accumulated);
         outState.putLong(KEY_START, startTime);
         outState.putInt(KEY_RECREATE, recreateCount);
-
+        outState.putBoolean(
+                KEY_STOP_BACKGROUND,
+                cbStopBackground.isChecked()
+        );
         Log.d(TAG,
                 "onSaveInstanceState – đã lưu "
                         + elapsed() + "ms vào Bundle");
